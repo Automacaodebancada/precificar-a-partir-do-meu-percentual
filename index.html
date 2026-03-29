@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora de Preço para Marketplace</title>
+<title>Calculadora de Preço com Imposto</title>
 <style>
 body{
 font-family: Arial, Helvetica, sans-serif;
@@ -20,7 +20,7 @@ background:white;
 padding:25px;
 border-radius:12px;
 box-shadow:0 6px 20px rgba(0,0,0,0.15);
-width:340px;
+width:360px;
 }
 
 h2{
@@ -91,7 +91,7 @@ color:#777;
 
 <div class="equation">
 Equação utilizada:<br>
-P = (C + F) / (1 - T - V)
+P = (C + F) / (1 - T - V - I)
 </div>
 
 <label>Custo do produto (C)</label>
@@ -106,12 +106,15 @@ P = (C + F) / (1 - T - V)
 <label>Minha comissão % (V)</label>
 <input type="number" id="v" step="0.01" placeholder="Ex: 25">
 
+<label>Imposto % (I)</label>
+<input type="number" id="i" step="0.01" placeholder="Ex: 5">
+
 <button onclick="calcularPreco()">Calcular Preço</button>
 
 <div class="result" id="resultado">Preço do produto (P): --</div>
 
 <div class="footer">
-Informe T e V em porcentagem
+Informe T, V e I em porcentagem
 </div>
 
 </div>
@@ -124,8 +127,9 @@ let c = parseFloat(document.getElementById('c').value);
 let f = parseFloat(document.getElementById('f').value);
 let t = parseFloat(document.getElementById('t').value);
 let v = parseFloat(document.getElementById('v').value);
+let i = parseFloat(document.getElementById('i').value);
 
-if(isNaN(c) || isNaN(f) || isNaN(t) || isNaN(v)){
+if(isNaN(c) || isNaN(f) || isNaN(t) || isNaN(v) || isNaN(i)){
 alert("Preencha todos os campos");
 return;
 }
@@ -133,17 +137,19 @@ return;
 // converter porcentagem para decimal
 let tDecimal = t / 100;
 let vDecimal = v / 100;
+let iDecimal = i / 100;
 
-let denominador = 1 - tDecimal - vDecimal;
+let denominador = 1 - tDecimal - vDecimal - iDecimal;
 
 if(denominador <= 0){
-alert("Taxa + Comissão não podem ser maiores ou iguais a 100%.");
+alert("A soma de taxas, comissão e imposto não pode ser maior ou igual a 100%.");
 return;
 }
 
 let p = (c + f) / denominador;
 
 let precoFinal = p.toFixed(2);
+
 
 document.getElementById('resultado').innerHTML = "Preço do produto (P): R$ " + precoFinal;
 
